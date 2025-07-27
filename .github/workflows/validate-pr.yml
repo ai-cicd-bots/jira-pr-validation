@@ -20,7 +20,8 @@ jobs:
       - name: Install dependencies
         run: |
           npm init -y
-          npm install @actions/core @actions/github
+          # pin to v2 for CommonJS fetch support
+          npm install @actions/core @actions/github node-fetch@2.6.9
 
       - name: Run PR Validator
         env:
