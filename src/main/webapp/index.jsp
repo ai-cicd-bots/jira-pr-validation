@@ -15,7 +15,7 @@ Released   : 20101122
 <meta name="keywords" content="" />
 <meta name="description" content="" />
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<title>Sample Tomcat Application</title>
+<title>Flower Mom Application</title>
 <link href="style.css" rel="stylesheet" type="text/css" media="screen" />
 </head>
 <body>
