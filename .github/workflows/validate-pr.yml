@@ -1,4 +1,4 @@
-name: "Validate PR Against JIRA with Mistral 7B"
+name: "Validate PR Against JIRA with Mistral"
 
 on:
   pull_request:
