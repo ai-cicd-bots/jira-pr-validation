@@ -1,29 +1,23 @@
-// File: .github/scripts/validate_pr.js
-
+// Use Node 18+'s global fetch—no node-fetch import required
 const core   = require('@actions/core');
 const github = require('@actions/github');
 
-// Dynamic import wrapper for node-fetch (ESM-only)
-const fetch = (...args) =>
-  import('node-fetch').then(({ default: fetch }) => fetch(...args));
-
 async function run() {
   try {
-    // GitHub context
     const token   = process.env.GITHUB_TOKEN;
     const octokit = github.getOctokit(token);
     const { owner, repo, number: prNumber } = github.context.issue;
 
-    // 1. Fetch PR metadata + diff
+    // 1) Fetch PR data + diff
     const { data: pr } = await octokit.rest.pulls.get({ owner, repo, pull_number: prNumber });
     const diff = await octokit.rest.pulls.get({
       owner, repo, pull_number: prNumber,
       mediaType: { format: 'diff' }
     }).then(res => res.data);
 
-    // 2. Validate JIRA link in PR body
+    // 2) Check for JIRA link
+    const bodyText     = pr.body || '';
     const jiraUrlRegex = /https:\/\/[^ ]+\/browse\/[A-Z]+-\d+/;
-    const bodyText = pr.body || '';
     if (!jiraUrlRegex.test(bodyText)) {
       await octokit.rest.issues.createComment({
         owner, repo, issue_number: prNumber,
@@ -35,12 +29,11 @@ async function run() {
     const jiraLink = bodyText.match(jiraUrlRegex)[0];
     const jiraKey  = jiraLink.split('/').pop();
 
-    // 3. Fetch JIRA story details via REST API
+    // 3) Pull JIRA details
     const jiraAuth = Buffer.from(
       `${process.env.JIRA_USER_EMAIL}:${process.env.JIRA_API_TOKEN}`
     ).toString('base64');
-
-    const jiraRes  = await fetch(
+    const jiraRes = await fetch(
       `https://${process.env.JIRA_HOST}/rest/api/3/issue/${jiraKey}`,
       {
         headers: {
@@ -49,13 +42,16 @@ async function run() {
         }
       }
     );
-    const jiraJson = await jiraRes.json();
+    if (!jiraRes.ok) {
+      throw new Error(`JIRA API returned ${jiraRes.status}`);
+    }
+    const jiraJson        = await jiraRes.json();
     const jiraSummary     = jiraJson.fields.summary;
-    const jiraDescription = jiraJson.fields.description?.content
+    const jiraDescription = (jiraJson.fields.description?.content || [])
       .map(block => block.content?.map(c => c.text).join(''))
-      .join('\n') || '';
+      .join('\n');
 
-    // 4. Build prompt and call Mistral
+    // 4) Send prompt to Mistral
     const prompt = `
 Compare the following two items and return JSON: {"score": <0-100>, "comment": "<brief justification>"}
 
@@ -72,7 +68,7 @@ ${jiraDescription}
     `.trim();
 
     const mistRes = await fetch('https://api.mistral.ai/v1/completions', {
-      method: 'POST',
+      method:  'POST',
       headers: {
         'Content-Type':  'application/json',
         'Authorization': `Bearer ${process.env.MISTRAL_API_KEY}`
@@ -84,16 +80,16 @@ ${jiraDescription}
       })
     });
     const mistJson = await mistRes.json();
-    const aiReply  = mistJson.choices?.[0]?.text?.trim() || '';
+    const aiReply  = mistJson.choices?.[0]?.text.trim() || '';
 
-    let result = { score: 0, comment: 'Unable to parse AI response.' };
+    // 5) Parse & post result
+    let result = { score: 0, comment: 'Could not parse AI response.' };
     try {
       result = JSON.parse(aiReply);
-    } catch (e) {
-      core.warning(`AI reply not valid JSON:\n${aiReply}`);
+    } catch {
+      core.warning(`Invalid JSON from AI:\n${aiReply}`);
     }
 
-    // 5. Comment back and set status
     const verdict = result.score >= 80 ? '✅ PASSED' : '⚠️ BELOW THRESHOLD';
     const comment = `
 **JIRA Validation**: ${verdict}  
