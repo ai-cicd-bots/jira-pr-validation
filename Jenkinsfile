@@ -3,9 +3,9 @@ pipeline {
 
   // Use your pre-installed Node.js; if you need a specific version, install via NodeJS plugin
   environment {
-    GITHUB_TOKEN    = credentials('github-token')
-    MISTRAL_API_KEY = credentials('mistral-api-key')
-    JIRA_HOST       = 'yourcompany.atlassian.net'
+    GITHUB_TOKEN    = credentials('GitAPI')
+    MISTRAL_API_KEY = credentials('MISTRAL_API_KEY')
+    JIRA_HOST       = credentials('JIRA_URL')
   }
 
   stages {
