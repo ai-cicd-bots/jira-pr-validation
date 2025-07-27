@@ -2,9 +2,9 @@ pipeline {
   agent any
 
   environment {
-    GITHUB_TOKEN    = credentials('github-token')
-    MISTRAL_API_KEY = credentials('mistral-api-key')
-    JIRA_HOST       = 'yourcompany.atlassian.net'
+    GITHUB_TOKEN    = credentials('GitAPI')
+    MISTRAL_API_KEY = credentials('MISTRAL_API_KEY')
+    JIRA_HOST       = 'https://shakil-ahamed.atlassian.net'
   }
 
   parameters {
@@ -24,7 +24,7 @@ pipeline {
           )
         ]) {
           sh """
-            node /opt/pr-validator/validate_pr_server.js \
+            node /home/AI_SDP_PLATFORM/ai-pr-validator/app.js \
               --owner=${params.PR_OWNER} \
               --repo=${params.PR_REPO} \
               --prNumber=${params.PR_NUMBER}
