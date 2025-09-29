@@ -134,6 +134,10 @@ pipeline {
 - **Model**: Change the Mistral model in `getPercentageMatch` and `getCodeReviewComments`.  
 - **Logging**: Enable or disable debug logging by commenting out the `console.log` statements.
 
+## Webhook Configurations
+
+<img width="935" height="393" alt="image" src="https://github.com/user-attachments/assets/1574bd41-4ef4-4148-880c-5c8a2f366b89" />
+
 ---
 
 ## Contributing
