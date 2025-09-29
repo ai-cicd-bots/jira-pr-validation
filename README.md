@@ -150,16 +150,81 @@ pipeline {
 
 ---
 
-## License
+🚀 How It Works
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+Developer references a JIRA ticket in the PR description.
+Validator fetches the story summary and code diff in seconds.
+AI computes a “Context Match Score” to ensure alignment.
+Inline comments highlight potential misalignment, style issues, or missing tests.
+A consolidated summary report and score are posted back to the PR automatically.
 
----
 
-## Acknowledgments
+✨ Core Features
 
-- [Octokit REST API](https://github.com/octokit/rest.js)  
-- [Mistral AI](https://mistral.ai)  
-- [Jenkins Generic Webhook Trigger Plugin](https://plugins.jenkins.io/generic-webhook-trigger/)  
+Context Alignment – Quantify how well your code addresses the linked JIRA story.
+AI-Generated Feedback – Targeted inline suggestions for clarity, style, and edge cases.
+Customizable Thresholds – Define your pass/fail score to enforce standards automatically.
+Minimal Setup – A single CLI command or CI hook activates powerful validation.
+Extensible & Secure – Runs in your own Node.js environment, no external code exposure.
 
-Happy automating! 🚀
+
+🧰 Tech Stack
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ComponentTechnologyRoleValidator CoreNode.js (ESM Modules)GitHub & JIRA API orchestration, score computationAI EngineMistral AINatural-language comparison & review comment generationAuthenticationOAuth & API TokensSecure access to GitHub and JIRACLI InterfaceCommander.jsConfigurable flags, environment support
+
+✅ Key Benefits
+
+Accelerated Reviews – Cut review meetings by up to 50% with AI-driven suggestions.
+Higher Code Quality – Surface missing tests, edge cases, and style inconsistencies instantly.
+Feature Confidence – Ensure every change maps directly back to planned requirements.
+Reduced Rework – Catch misalignments early, save hours of back-and-forth comments.
+Scalable Governance – Apply consistent standards across dozens of teams and projects.
+
+
+📈 Productivity Impact
+By automating context checks and primary review tasks, engineering teams reclaim focus on innovation instead of administrative overhead.
+
+Onboarding accelerates when new joiners receive clear, AI-backed guidance.
+Senior engineers spend less time on routine feedback and more time mentoring or architecting strategic features.
+The net result: faster cycle times, fewer hotfixes, and a measurable uptick in deployment frequency.
+
+
+💡 Ready to Transform Your PR Workflow?
+Experience the future of code review—where AI amplifies your team’s expertise and eliminates friction.
+Get started in minutes with our open-source CLI or schedule a demo for enterprise support and advanced customization.
+
+🔗 References
+
+Sample PR: https://github.com/ai-cicd-bots/jira-pr-validation/pull/9
+Jenkins Job: Jenkins Job
+JIRA Story: [Update Application Title](https://shakil-ahamed.atlassian.net/browse/ADUN-7)
+
