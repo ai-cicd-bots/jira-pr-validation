@@ -222,6 +222,10 @@ The net result: faster cycle times, fewer hotfixes, and a measurable uptick in d
 Experience the future of code review—where AI amplifies your team’s expertise and eliminates friction.
 Get started in minutes with our open-source CLI or schedule a demo for enterprise support and advanced customization.
 
+
+<img width="757" height="399" alt="image" src="https://github.com/user-attachments/assets/4d27c498-9cf6-423f-9a04-6178fc4ea5e2" />
+
+
 🔗 References
 
 Sample PR: https://github.com/ai-cicd-bots/jira-pr-validation/pull/9
